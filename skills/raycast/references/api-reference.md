@@ -1,6 +1,6 @@
 # Raycast API reference: signatures and gotchas
 
-> Distilled from developers.raycast.com API Reference pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled 09-24-26 from developers.raycast.com API Reference pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 ## Not in the API reference (do not claim these)
 - [Clipboard] No `transient` copy option — only `concealed`. (Check newer @raycast/api typings before using `transient`.)
@@ -145,7 +145,7 @@
 
 ## AI
 - [AI] `AI.ask(prompt, { creativity?, model?, signal? }): Promise<string> & EventEmitter`; stream via `const a = AI.ask(p); a.on("data", chunk => …); await a;`.
-- [AI] `creativity`: "none"|"low"|"medium"|"high"|"maximum"|0-2 number (clamped). `model`: `AI.Model["Anthropic_Claude_Sonnet_5"]`-style keys or `{ id }` for extension-provided models; unavailable model → similar fallback.
+- [AI] `creativity`: "none"|"low"|"medium"|"high"|"maximum"|0-2 number (clamped). `model`: `AI.Model["Anthropic_Claude_Sonnet_5"]`-style keys or `{ id }` for extension-provided models; unavailable model → similar fallback. [API 2.7.0, npm 10-07-26, no docs changelog entry] adds `AI.Model["OpenAI_GPT-6.1_Sol"]` and deprecates `OpenAI_GPT-5.6_Sol`; deprecated keys still compile, so read the current list from `node_modules/@raycast/api/types/index.d.ts` (`enum Model`) before naming one.
 - [AI] Rate limit **10/min, 100/hour** per extension. Non-Pro users get prompted; declining throws → catch + failure toast; pre-check `environment.canAccess(AI)`.
 - [AI] In React use `useAI` from @raycast/utils instead.
 - [AI] `AI.experimental_decide({ state, questions: { k: { type: "noul"|"choice"|"score", instructions, criteria? } } }, { signal? })` → typed probability/choice/score answers, no streaming. Experimental.

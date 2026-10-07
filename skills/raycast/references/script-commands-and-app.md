@@ -1,6 +1,6 @@
 # Script Commands spec and Raycast app features
 
-> Distilled from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled 09-24-26 from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentation/ARGUMENTS.md;
 [SC-OUT] documentation/OUTPUTMODES.md; [MAN] Raycast manual (manual-full.txt, v2, updated Aug-Sep 2026);
@@ -69,6 +69,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Allowed chars: a-z, 0-9, space only; auto-lowercased; multi-word OK (space shown as a visible-space glyph). No special chars. [MAN]
 - Strict PREFIX matching (not fuzzy): exact alias = top result; prefix = boosted. Take effect immediately. [MAN]
 - Set: select command -> cmd-, (or cmd-K -> Configure Command) -> Set Alias; or Settings -> Shortcuts. [MAN]
+- [MAN] Alias + space on a command with arguments focuses its first argument field (e.g. alias `t`, a space, then `5` fills the first argument). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
 
 ## Hotkeys
 - Global; work with Raycast closed. Set via Configure Command -> Set/Record Hotkey or Settings -> Shortcuts. Recorder auto-saves after ~1.5s (Return saves now, Backspace clears). [MAN]
@@ -76,6 +77,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Keys record as PHYSICAL position by default; click a key in the recorder to toggle key-equivalent (blue dot). Built-in Raycast shortcuts always use key equivalents. [MAN]
 - Conflicts: the launcher hotkey can't be overwritten; another command's hotkey can (it loses it). Incompatible pairs flagged with red dot (single opt tap vs opt-opt double tap). [MAN]
 - Settings -> Shortcuts has filters "Hotkey Set" / "Alias Set" to audit everything. [MAN]
+- [MAN] A lone-modifier hotkey records the side pressed (small L / R); click the key in the recorder to cycle left → right → any side. Regular keys include F1-F24. A hotkey that stops firing: check Settings → Shortcuts (system updates can clear hotkeys) and that Raycast still has Accessibility.
 
 ## Hyper Key
 - Settings -> Keyboard -> Hyper Key: Caps Lock, any L/R modifier, or F1-F12. Mac emits ctrl-opt-cmd (+shift if "Include Shift"). Shown as a star glyph in UI. [MAN]
@@ -132,9 +134,10 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Install MCP Server command: transport stdio (Command, Arguments as space string OR JSON array, Environment kv) or HTTP (URL, headers, OAuth Dynamic w/ PKCE or Static client id/secret). [MAN]
 - Stdio servers inherit Raycast's env; after changing PATH/env vars you must RESTART Raycast. [MAN]
 - Manage MCP Servers: Running/Stopped/Error status, details pane shows server stderr/output; Start/Stop/Restart/Logout/Uninstall. Each server gets `@name` and a root-search "Ask <Server>" command. Exported in `.rayconfig`. [MAN]
+- [MAN] A Store extension can bundle its own MCP server (manifest `ai.mcp`, API 2.5.0): installing the extension installs and connects it, and it shows in Manage MCP Servers beside manual ones.
 
 ## Skills (Raycast AI)
-- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
+- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills installed in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
 - One subfolder per skill; folder name MUST equal frontmatter `name`; file exactly `SKILL.md`. `name` 1-64 chars `[a-z0-9-]`, no leading/trailing/double hyphen; `description` 1-1024 chars. Duplicate names: first found wins. Failures skipped silently. [MAN]
 - Model sees only name/description/path catalog; description should lead with WHEN to use. Needs a tool-capable model. Folder scan cached ~60s. [MAN]
 
@@ -146,6 +149,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Script not listed: see discovery checklist above. Script errors: run it in Terminal with `env -i` style minimal PATH to reproduce. [SC-README, inferred]
 - Quicklink placeholders not replaced: check `{argument name="..."}` braces, <=3 args, placeholder name spelling. [MAN]
 - Frozen: quit/reopen; "Copy Raycast Logs" first. Missing permission: grant to Raycast in Privacy & Security. [MAN]
+- [MAN] A local dev extension misbehaving: bring `@raycast/api` up to date in `package.json`, `npm install`, then `npm run dev` again; `npx @raycast/api@latest dev` tries the newest CLI without touching `package.json`.
 
 ## Extensions Guidelines (Store; worth following for personal too)
 - README must state setup: API keys, credentials, codes needed to connect. Collected data used only for the service. [MAN]
