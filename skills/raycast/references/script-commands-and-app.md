@@ -1,6 +1,6 @@
 # Script Commands spec and Raycast app features
 
-> Distilled 09-24-26 from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentation/ARGUMENTS.md;
 [SC-OUT] documentation/OUTPUTMODES.md; [MAN] Raycast manual (manual-full.txt, v2, updated Aug-Sep 2026);
@@ -42,7 +42,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 
 ## Script Commands: files, discovery, environment
 - Any filename containing `.template.` is IGNORED (community convention: must fill in values, then rename). [SC-README]
-- Discovery: Settings -> Extensions (or Script Commands) -> + -> Add Script Directory; every script file in the folder is indexed. Metadata edits (rename, add argument, change mode) are picked up automatically, no restart. [SC-README][MAN]
+- Discovery: Raycast 2: Settings -> Script Commands -> Add Script Directory (v1: Settings -> Extensions -> + -> Add Script Directory); every script file in the folder is indexed. Metadata edits (rename, add argument, change mode) are picked up automatically, no restart. [SC-README][MAN]
 - "Create Script Command" scaffolds a file from a language template with the header pre-filled. [MAN]
 - Not appearing? check: `.template.` in name, all 3 required keys, `#` or `//` comment prefix; then diff against an official template. [SC-README]
 - Don't point Raycast directly at a cloned community repo folder (restructures = commands appear/vanish); copy scripts into your own dir. [SC-README]
@@ -100,7 +100,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Modifiers, chainable: `{clipboard | trim | uppercase}`; `uppercase`, `lowercase`, `trim`, `percent-encode`, `json-stringify`, `raw`. [MAN]
 - Defaults: Quicklinks auto percent-encode; AI Commands wrap values in `"""`. Opt out with `| raw`. [MAN]
 - Offsets: `{date offset="+2y +5M"}`, `{time offset="+3h +30m"}`; units m=min, h, d, M=month, y; case-sensitive; NO space after sign. [MAN]
-- Format: `{date format="yyyy-MM-dd"}` (Unicode TR35 patterns; literals in single quotes). Example: `{date format="MM-dd-yy"}`. `format` and `locale` are mutually exclusive. [MAN]
+- Format: `{date format="yyyy-MM-dd"}` (Unicode TR35 patterns; literals in single quotes). `format` and `locale` are mutually exclusive. [MAN]
 - Locale: `{date locale="fr-FR"}`, hyphens not underscores; `{time locale="en-US-u-hc-h23"}` forces 24h. [MAN]
 - Arguments: `{argument default="happy"}` makes it optional; `{argument name="tone" options="happy, sad, professional"}` = dropdown. Max 3 distinct. [MAN]
 - `{browser-tab format="markdown|text|html"}`, `{browser-tab selector="a.author"}` CSS selector extract. [MAN]
@@ -134,7 +134,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Manage MCP Servers: Running/Stopped/Error status, details pane shows server stderr/output; Start/Stop/Restart/Logout/Uninstall. Each server gets `@name` and a root-search "Ask <Server>" command. Exported in `.rayconfig`. [MAN]
 
 ## Skills (Raycast AI)
-- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills are visible to Raycast AI automatically. [MAN]
+- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
 - One subfolder per skill; folder name MUST equal frontmatter `name`; file exactly `SKILL.md`. `name` 1-64 chars `[a-z0-9-]`, no leading/trailing/double hyphen; `description` 1-1024 chars. Duplicate names: first found wins. Failures skipped silently. [MAN]
 - Model sees only name/description/path catalog; description should lead with WHEN to use. Needs a tool-capable model. Folder scan cached ~60s. [MAN]
 
@@ -152,3 +152,17 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Rejected if it duplicates a native feature (Quicklinks, Snippets, Clipboard History, Calculator) or an existing Store extension; one extension per service (extend, don't fork). [MAN]
 - Name may not contain "Assistant". Must follow technical guidelines at developers.raycast.com/basics/prepare-an-extension-for-store. [MAN]
 - PRs: stale after 14 days, closed after 21 days of inactivity. [MAN]
+
+## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked against Raycast 2.6.2)
+
+- Raycast 2 replaces v1 in place (`/Applications/Raycast.app`, bundle id still `com.raycast.macos`); needs macOS Tahoe on Apple silicon. "Keep Both" at install leaves `Raycast` (still v1) and `Raycast 2`; fix = quit, delete both, reinstall. [MAN]
+- Data paths unchanged: `~/.config/raycast/extensions/<name>/` (plus a `node_modules` symlink into the app bundle's `api/node_modules`), `~/Library/Application Support/com.raycast.macos/` (encrypted `.db` files), logs `~/Library/Logs/com.raycast.macos/raycast-x-*.log`.
+- Migrate from Raycast v1: automatic prompt on first launch, or the **Migrate from Raycast v1** command later; needs v1 >= 1.104.16; additive, duplicates skipped; brings Clipboard History, Wrapped and Emoji customizations that a `.rayconfig` lacks. Importing v1 Settings, Aliases & Hotkeys overrides the v2 ones and offers to disable them in v1. Some macOS permissions must be granted again. [MAN]
+- Custom (dev) extensions that didn't come across: re-import with `npx @raycast/api@latest dev` (`ray develop`), which targets v2 when it is running and v1 otherwise. 2.6.2's migration dropped every dev extension whose folder path had a space (SKILL.md section 3). [MAN + observed]
+- `.rayconfig` export (Export Settings & Data): AI chats/commands/agents, Clipboard History, Quicklinks, Snippets, Notes, Emoji history, MCP servers, **Store extensions only**, Settings + Aliases + Hotkeys, Wrapped, Window layouts. Encrypted (passphrase >= 8 chars); Pro can schedule exports (Settings -> Advanced -> Export). Imports pick categories and merge, never overwrite. [MAN]
+- Local extensions are managed by you: Check for Extension Updates and auto-update only touch Store installs; the app also has an **Import Extension** command. [MAN]
+- Hotkeys and aliases: set straight from the Action Panel in root search (no trip to Settings); `fn` alone, double-tap modifiers, left vs right modifiers, physical vs key-equivalent recording; Settings has its own search sidebar; **Settings -> Shortcuts** lists all hotkeys ("System updates occasionally clear hotkeys"). [MAN]
+- Script Commands: run with the regional `LANG` locale (falls back to `C.UTF-8`); a script whose first argument is text (others optional) can be a Fallback Command (Settings -> Launcher -> Fallback Commands). [MAN]
+- Quick AI can be the fallback command; File Search results now appear in root search; Presets became Agents; Skills, Memory, Automations (scheduled AI prompts) and Projects are new. [MAN]
+- Tahoe: Raycast must be in System Settings -> Menu Bar -> Allow in the Menu Bar, or menu-bar commands vanish. On macOS 27 Accessibility is renamed "Device Control and Data Access". [MAN Troubleshooting]
+- Local extension misbehaving: keep `@raycast/api` current and `npm install` before `npm run dev`; `npx @raycast/api@latest dev` uses the latest CLI without editing package.json. [MAN Troubleshooting]

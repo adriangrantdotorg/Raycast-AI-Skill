@@ -1,6 +1,6 @@
 # Raycast API reference: signatures and gotchas
 
-> Distilled 09-24-26 from developers.raycast.com API Reference pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled from developers.raycast.com API Reference pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 ## Not in the API reference (do not claim these)
 - [Clipboard] No `transient` copy option — only `concealed`. (Check newer @raycast/api typings before using `transient`.)
@@ -54,7 +54,7 @@
 - [Keyboard] `Keyboard.Shortcut.Common.*` (macOS): Copy ⌘⇧C, CopyDeeplink ⌘⇧C, CopyName ⌘⌥C, CopyPath ⌘⌃C, Save ⌘S, Duplicate ⌘D, Edit ⌘E, MoveDown ⌘⌥↓, MoveUp ⌘⌥↑, New ⌘N, Open ⌘O, OpenWith ⌘⇧O, Pin ⌘., Refresh ⌘R, Remove ⌃X, RemoveAll ⌃⇧X, ToggleQuickLook ⌘Y.
 - [Keyboard] Modifiers: `"cmd" | "ctrl" | "opt" | "shift" | "alt" | "windows"` ("alt" == "opt").
 - [Keyboard] Cross-platform form when using cmd/ctrl/windows: `{ macOS: { modifiers: ["cmd","shift"], key: "c" }, Windows: { modifiers: ["ctrl","shift"], key: "c" } }`.
-- [Keyboard] Keys: a-z, 0-9, `. , ; = + - [ ] { } « » ( ) / \ ' \` ^ @ $` plus the section-sign key, `return delete deleteForward tab arrowUp/Down/Left/Right pageUp pageDown home end space escape enter backspace`.
+- [Keyboard] Keys: a-z, 0-9, `` . , ; = + - [ ] { } « » ( ) / \ ' ` ^ @ $ `` plus the section-sign key, `return delete deleteForward tab arrowUp/Down/Left/Right pageUp pageDown home end space escape enter backspace`.
 - [Action Panel] Primary/secondary defaults: List/Grid/Detail ↵ and ⌘↵; Form ⌘↵ and ⌘⇧↵. A custom shortcut on primary/secondary works but is NOT displayed.
 
 ## Menu bar (MenuBarExtra)

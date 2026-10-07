@@ -1,6 +1,6 @@
 # Raycast extension platform: manifest, lifecycle, CLI, debugging, AI tools
 
-> Distilled 09-24-26 from developers.raycast.com Basics, AI, and Information pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled from developers.raycast.com Basics, AI, and Information pages (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 ## Requirements / setup
 - [Getting Started] Raycast >= 1.26.0, Node >= 22.14, npm >= 7. (The API 2.0.0 changelog says the CLI now needs Node >= 22.22.2 — go with the higher one.) Must be signed in to Raycast for Create/Import/Manage Extensions commands.
@@ -34,7 +34,7 @@
 - [Manifest] `checkbox` needs `label` (text beside box). Group checkboxes into one section: set `title` on the first only, leave others' `title` empty.
 - [Manifest] `dropdown` needs `data: [{"title":"Item 1","value":"1"}]`; `default` = a `value` from data.
 - [Manifest] `default` types: textfield string, checkbox boolean, dropdown value, appPicker = app name / bundle ID / path. Per-platform default: `{ "macOS": ..., "Windows": ... }`.
-- [Manifest] `placeholder` optional (project convention: skip ghost text).
+- [Manifest] `placeholder` optional.
 - [Prepare for Store] `required: true` -> Raycast blocks the command with a setup form until filled.
 - [File Structure / Prepare] `help.md` next to package.json: Markdown shown BESIDE the required-preferences form (replaces the "About This Extension" link). README.md at root -> "About This Extension" button on onboarding screen.
 - [Prepare] Don't build a separate "configure" command; use preferences.
@@ -162,7 +162,6 @@
 - [Prepare] Use Navigation API (`Action.Push`/`useNavigation`), never swap view content to fake navigation.
 - [Prepare] Avoid flickering "No results": don't render empty list before data; use `isLoading` (all top-level views accept it) and `List.EmptyView`/`Grid.EmptyView` for true empty states.
 - [Prepare] Don't set `navigationTitle` on root command (auto = command name); only on pushed screens, keep short, don't update repeatedly.
-- [Prepare] Store guideline says add placeholders to text fields/search bar — CONFLICTS with this skill's "no placeholder ghost text" rule; the skill's rule wins for personal extensions (except `searchBarPlaceholder` judgment call).
 - [Best Practices] Forms: validate in `onBlur`, clear `error` in `onChange`; `useForm` + `FormValidation.Required` from `@raycast/utils` does this. `Action.SubmitForm` `onSubmit` never fires while any field has `error`.
 - [Doppler example] `storeValue` on Form items (e.g. `Form.Dropdown`) remembers last value across launches.
 - [Best Practices] On network failure, fall back to cached data + Toast rather than error screen. Gate optional features on runtime deps (installed app/CLI) and show a helpful message when missing.
