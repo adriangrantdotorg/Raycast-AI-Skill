@@ -4,7 +4,7 @@
 
 > A free skill file that teaches your AI coding assistant how to build Raycast commands and extensions the right way, the first time.
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Raycast](https://img.shields.io/badge/Raycast-2.6-FF6363.svg)](https://developers.raycast.com/) [![Version](https://img.shields.io/github/v/release/adriangrantdotorg/Raycast-Skill?color=orange&label=Version)](https://github.com/adriangrantdotorg/Raycast-Skill/releases) [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Standard-8A2BE2.svg)](https://github.com/anthropics/skills) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/adriangrantdotorg/Raycast-Skill/pulls)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Raycast](https://img.shields.io/badge/Raycast-2.6-FF6363.svg)](https://developers.raycast.com/) [![Version](https://img.shields.io/github/v/release/adriangrantdotorg/Raycast-AI-Skill?color=orange&label=Version)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/releases) [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Standard-8A2BE2.svg)](https://github.com/anthropics/skills) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/pulls)
 
 ---
 
@@ -50,10 +50,10 @@ Keep the folder named `raycast`; tools skip a skill whose folder name doesn't ma
 ---
 
 ```bash
-git clone https://github.com/adriangrantdotorg/Raycast-Skill.git /tmp/Raycast-Skill
-cp -R /tmp/Raycast-Skill/skills/raycast ~/.claude/skills/raycast   # Claude Code
-cp -R /tmp/Raycast-Skill/skills/raycast ~/.cursor/skills/raycast   # Cursor
-cp -R /tmp/Raycast-Skill/skills/raycast ~/.agents/skills/raycast   # ChatGPT & Codex
+git clone https://github.com/adriangrantdotorg/Raycast-AI-Skill.git /tmp/Raycast-AI-Skill
+cp -R /tmp/Raycast-AI-Skill/skills/raycast ~/.claude/skills/raycast   # Claude Code
+cp -R /tmp/Raycast-AI-Skill/skills/raycast ~/.cursor/skills/raycast   # Cursor
+cp -R /tmp/Raycast-AI-Skill/skills/raycast ~/.agents/skills/raycast   # ChatGPT & Codex
 ```
 
 | **Platform** | **Skills folder** |
