@@ -30,7 +30,7 @@ TYPECHECK_DIR = os.path.expanduser("~/Library/Caches/raycast-skill-refresh/typec
 SNAPSHOT_DIR = os.path.expanduser("~/Library/Application Support/raycast-skill-refresh/manual")
 LINT_BASELINE = os.path.expanduser("~/Library/Application Support/raycast-skill-refresh/lint-baseline.json")
 LINT_PENDING = os.path.expanduser("~/Library/Caches/raycast-skill-refresh/lint-pending.json")
-RAYCAST_REPO = os.environ.get("RAYCAST_REPO", os.path.expanduser("~/Raycast"))
+RAYCAST_REPO = os.environ.get("RAYCAST_REPO", os.path.expanduser("~/raycast-extensions"))
 REPO = "raycast/extensions"
 MANUAL = "https://manual.raycast.com/llms-full.txt"
 TODAY = datetime.date.today().isoformat()
@@ -144,7 +144,7 @@ def diff_manual(page):
 
 
 def extensions():
-    """Extension folders in the MAIN checkout of your Raycast repo (RAYCAST_REPO) (folders with a package.json naming @raycast/api)."""
+    """Extension folders in the MAIN checkout of the Raycast repo (folders with a package.json naming @raycast/api)."""
     out = []
     for root, dirs, files in os.walk(RAYCAST_REPO):
         dirs[:] = [d for d in dirs if d not in ("node_modules", "dist", ".git", ".claude", "assets", "swift")]
@@ -182,7 +182,7 @@ def prepare_copy(ext):
 
 def lint_findings(output, work):
     """`ray lint` output → normalized findings: no paths, line numbers, versions or request ids, and never the
-    "Invalid author" error (personal extensions often use an author name that is not a Store account)."""
+    "Invalid author" error (a personal extension's author is often not a Store account)."""
     found = set()
     for line in output.splitlines():
         line = line.replace(work + "/", "").replace(work, "")

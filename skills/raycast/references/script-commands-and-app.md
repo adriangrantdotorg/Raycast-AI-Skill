@@ -69,7 +69,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Allowed chars: a-z, 0-9, space only; auto-lowercased; multi-word OK (space shown as a visible-space glyph). No special chars. [MAN]
 - Strict PREFIX matching (not fuzzy): exact alias = top result; prefix = boosted. Take effect immediately. [MAN]
 - Set: select command -> cmd-, (or cmd-K -> Configure Command) -> Set Alias; or Settings -> Shortcuts. [MAN]
-- [MAN] Alias + space on a command with arguments focuses its first argument field (e.g. alias `t`, a space, then `5` fills the first argument). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
+- [MAN] Alias + space on a command with arguments focuses its first argument field (how `t 5` works). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
 
 ## Hotkeys
 - Global; work with Raycast closed. Set via Configure Command -> Set/Record Hotkey or Settings -> Shortcuts. Recorder auto-saves after ~1.5s (Return saves now, Backspace clears). [MAN]
@@ -137,7 +137,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - [MAN] A Store extension can bundle its own MCP server (manifest `ai.mcp`, API 2.5.0): installing the extension installs and connects it, and it shows in Manage MCP Servers beside manual ones.
 
 ## Skills (Raycast AI)
-- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills installed in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
+- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
 - One subfolder per skill; folder name MUST equal frontmatter `name`; file exactly `SKILL.md`. `name` 1-64 chars `[a-z0-9-]`, no leading/trailing/double hyphen; `description` 1-1024 chars. Duplicate names: first found wins. Failures skipped silently. [MAN]
 - Model sees only name/description/path catalog; description should lead with WHEN to use. Needs a tool-capable model. Folder scan cached ~60s. [MAN]
 
@@ -157,7 +157,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Name may not contain "Assistant". Must follow technical guidelines at developers.raycast.com/basics/prepare-an-extension-for-store. [MAN]
 - PRs: stale after 14 days, closed after 21 days of inactivity. [MAN]
 
-## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked against Raycast 2.6.2)
+## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked 10-02-26, Raycast 2.6.2)
 
 - Raycast 2 replaces v1 in place (`/Applications/Raycast.app`, bundle id still `com.raycast.macos`); needs macOS Tahoe on Apple silicon. "Keep Both" at install leaves `Raycast` (still v1) and `Raycast 2`; fix = quit, delete both, reinstall. [MAN]
 - Data paths unchanged: `~/.config/raycast/extensions/<name>/` (plus a `node_modules` symlink into the app bundle's `api/node_modules`), `~/Library/Application Support/com.raycast.macos/` (encrypted `.db` files), logs `~/Library/Logs/com.raycast.macos/raycast-x-*.log`.
