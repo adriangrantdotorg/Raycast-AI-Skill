@@ -1,10 +1,10 @@
 # Script Commands spec and Raycast app features
 
-> Distilled 09-24-26 from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentation/ARGUMENTS.md;
 [SC-OUT] documentation/OUTPUTMODES.md; [MAN] Raycast manual (manual-full.txt, v2, updated Aug-Sep 2026);
-[DEV-DL] raycast/extensions docs/information/lifecycle/deeplinks.md.
+[DEV-DL] raycast/extensions docs/information/lifecycle/deeplinks.md; [APP] read from the installed Raycast.app bundle and verified against its log.
 
 ## Script Commands: metadata keys (all `# @raycast.<key> <value>`; `//` comments also OK)
 - Required: `schemaVersion` (only `1` exists), `title` (root-search name), `mode`. Missing any = script silently not listed. [SC-README]
@@ -62,14 +62,14 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Known built-ins: `raycast://extensions/raycast/raycast/store`, `raycast://extensions/raycast/raycast/send-feedback`. [MAN]
 - Focus: `raycast://focus/start?goal=Deep%20Focus&categories=social,gaming&duration=300&mode=block`, `raycast://focus/toggle`, `raycast://focus/complete`. [MAN]
 - Window mgmt: `raycast://customWindowManagementCommand?&name=MyCommand&position=center&absoluteWidth=500.0&relativeHeight=0.5&absoluteXOffset=0.0&absoluteYOffset=0.0`. `name` matching an existing custom command ignores the other params; omit `name` for a one-off temp command; `relative*` = % of screen, ignored if the `absolute*` twin is set. Window LAYOUT deeplinks accept only `name`. [MAN]
-- Script commands and quicklinks: not documented in the manual; get the URL via Copy Deeplink (format observed in the wild: `raycast://script-commands/<file-slug>`; unverified). [MAN]
+- Built-ins and script commands (verified against Raycast 2.8's own builder, backend `SQi` + slug `wd` in `Raycast.app/.../backend/index.mjs`): `raycast://extensions/raycast/<slug(extension title)>/<slug(command title)>`, e.g. `raycast://extensions/raycast/snippets/search-snippets`; script commands use extension `script-commands` and the slug of `@raycast.title` (`raycast://extensions/raycast/script-commands/hourly-rate-to-annual-salary-calculator`). Slug = NFD, strip accents, lowercase, trim, drop everything but `a-z0-9 -`, spaces to `-`, collapse `--`. Script arguments go as repeated `arguments=<value>` params (not JSON). A wrong slug logs `Command not found: <slug> in <extension>`. The old `raycast://script-commands/<file-slug>` form is not what Raycast generates. Quicklinks: still use Copy Deeplink. [APP]
 - AI Projects also expose Copy Deeplink; old "folder" deeplinks still resolve after v2 rename to Projects. [MAN]
 
 ## Aliases
 - Allowed chars: a-z, 0-9, space only; auto-lowercased; multi-word OK (space shown as a visible-space glyph). No special chars. [MAN]
 - Strict PREFIX matching (not fuzzy): exact alias = top result; prefix = boosted. Take effect immediately. [MAN]
 - Set: select command -> cmd-, (or cmd-K -> Configure Command) -> Set Alias; or Settings -> Shortcuts. [MAN]
-- [MAN] Alias + space on a command with arguments focuses its first argument field (how `t 5` works). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
+- [MAN] Alias + space on a command with arguments focuses its first argument field (so typing an alias, a space, then a value fills the argument). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
 
 ## Hotkeys
 - Global; work with Raycast closed. Set via Configure Command -> Set/Record Hotkey or Settings -> Shortcuts. Recorder auto-saves after ~1.5s (Return saves now, Backspace clears). [MAN]
@@ -137,7 +137,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - [MAN] A Store extension can bundle its own MCP server (manifest `ai.mcp`, API 2.5.0): installing the extension installs and connects it, and it shows in Manage MCP Servers beside manual ones.
 
 ## Skills (Raycast AI)
-- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
+- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So skills kept in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
 - One subfolder per skill; folder name MUST equal frontmatter `name`; file exactly `SKILL.md`. `name` 1-64 chars `[a-z0-9-]`, no leading/trailing/double hyphen; `description` 1-1024 chars. Duplicate names: first found wins. Failures skipped silently. [MAN]
 - Model sees only name/description/path catalog; description should lead with WHEN to use. Needs a tool-capable model. Folder scan cached ~60s. [MAN]
 
@@ -157,7 +157,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Name may not contain "Assistant". Must follow technical guidelines at developers.raycast.com/basics/prepare-an-extension-for-store. [MAN]
 - PRs: stale after 14 days, closed after 21 days of inactivity. [MAN]
 
-## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked 10-02-26, Raycast 2.6.2)
+## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked against Raycast 2.6.2)
 
 - Raycast 2 replaces v1 in place (`/Applications/Raycast.app`, bundle id still `com.raycast.macos`); needs macOS Tahoe on Apple silicon. "Keep Both" at install leaves `Raycast` (still v1) and `Raycast 2`; fix = quit, delete both, reinstall. [MAN]
 - Data paths unchanged: `~/.config/raycast/extensions/<name>/` (plus a `node_modules` symlink into the app bundle's `api/node_modules`), `~/Library/Application Support/com.raycast.macos/` (encrypted `.db` files), logs `~/Library/Logs/com.raycast.macos/raycast-x-*.log`.
