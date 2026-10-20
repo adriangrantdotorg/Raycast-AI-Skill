@@ -144,7 +144,7 @@ def diff_manual(page):
 
 
 def extensions():
-    """Extension folders in the MAIN checkout of your Raycast repo (RAYCAST_REPO) (folders with a package.json naming @raycast/api)."""
+    """Extension folders in the MAIN checkout of the Raycast repo (folders with a package.json naming @raycast/api)."""
     out = []
     for root, dirs, files in os.walk(RAYCAST_REPO):
         dirs[:] = [d for d in dirs if d not in ("node_modules", "dist", ".git", ".claude", "assets", "swift")]
@@ -182,7 +182,7 @@ def prepare_copy(ext):
 
 def lint_findings(output, work):
     """`ray lint` output → normalized findings: no paths, line numbers, versions or request ids, and never the
-    "Invalid author" error (a personal extension's author need not be a Store account)."""
+    "Invalid author" error (a personal author handle that is not a Store account fails it on every extension)."""
     found = set()
     for line in output.splitlines():
         line = line.replace(work + "/", "").replace(work, "")
