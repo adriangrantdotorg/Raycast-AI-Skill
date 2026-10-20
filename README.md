@@ -4,7 +4,7 @@
 
 > A free skill that teaches your AI coding assistant to build Raycast commands and extensions the right way, the first time.
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Raycast API](https://img.shields.io/badge/Raycast%20API-2.7.0-FF6363.svg)](https://developers.raycast.com/) [![Version](https://img.shields.io/github/v/release/adriangrantdotorg/Raycast-AI-Skill?color=orange&label=Version)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/releases) [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Standard-8A2BE2.svg)](https://github.com/anthropics/skills) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/pulls)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt) [![Raycast API](https://img.shields.io/badge/Raycast%20API-2.8.2-FF6363.svg)](https://developers.raycast.com/) [![Version](https://img.shields.io/github/v/release/adriangrantdotorg/Raycast-AI-Skill?color=orange&label=Version)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/releases) [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Standard-8A2BE2.svg)](https://github.com/anthropics/skills) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/adriangrantdotorg/Raycast-AI-Skill/pulls)
 
 ---
 
@@ -12,7 +12,7 @@
 
 - ⏱️ **Less time per command** — it gets things right on the first try
 - 💸 **$0 added cost** — it rides on the AI you already pay for
-- 📅 **Current with Raycast API 2.7.0** — not the AI's year-old memory
+- 📅 **Current with Raycast API 2.8.2** — not the AI's year-old memory
 
 | | 😩 Without this Skill | 😌 With this Skill |
 | --- | :---: | :---: |
