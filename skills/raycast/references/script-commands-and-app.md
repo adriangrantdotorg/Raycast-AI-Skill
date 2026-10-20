@@ -1,6 +1,6 @@
 # Script Commands spec and Raycast app features
 
-> Distilled from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled 09-24-26 from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentation/ARGUMENTS.md;
 [SC-OUT] documentation/OUTPUTMODES.md; [MAN] Raycast manual (manual-full.txt, v2, updated Aug-Sep 2026);
@@ -62,14 +62,14 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Known built-ins: `raycast://extensions/raycast/raycast/store`, `raycast://extensions/raycast/raycast/send-feedback`. [MAN]
 - Focus: `raycast://focus/start?goal=Deep%20Focus&categories=social,gaming&duration=300&mode=block`, `raycast://focus/toggle`, `raycast://focus/complete`. [MAN]
 - Window mgmt: `raycast://customWindowManagementCommand?&name=MyCommand&position=center&absoluteWidth=500.0&relativeHeight=0.5&absoluteXOffset=0.0&absoluteYOffset=0.0`. `name` matching an existing custom command ignores the other params; omit `name` for a one-off temp command; `relative*` = % of screen, ignored if the `absolute*` twin is set. Window LAYOUT deeplinks accept only `name`. [MAN]
-- Built-ins and script commands (verified against Raycast 2.8's own builder, backend `SQi` + slug `wd` in `Raycast.app/.../backend/index.mjs`): `raycast://extensions/raycast/<slug(extension title)>/<slug(command title)>`, e.g. `raycast://extensions/raycast/snippets/search-snippets`; script commands use extension `script-commands` and the slug of `@raycast.title` (`raycast://extensions/raycast/script-commands/hourly-rate-to-annual-salary-calculator`). Slug = NFD, strip accents, lowercase, trim, drop everything but `a-z0-9 -`, spaces to `-`, collapse `--`. Script arguments go as repeated `arguments=<value>` params (not JSON). A wrong slug logs `Command not found: <slug> in <extension>`. The old `raycast://script-commands/<file-slug>` form is not what Raycast generates. Quicklinks: still use Copy Deeplink. [APP]
+- Built-ins and script commands (verified 10-15-26 against Raycast 2.8's own builder, backend `SQi` + slug `wd` in `Raycast.app/.../backend/index.mjs`): `raycast://extensions/raycast/<slug(extension title)>/<slug(command title)>`, e.g. `raycast://extensions/raycast/snippets/search-snippets`; script commands use extension `script-commands` and the slug of `@raycast.title` (`raycast://extensions/raycast/script-commands/hourly-rate-to-annual-salary-calculator`). Slug = NFD, strip accents, lowercase, trim, drop everything but `a-z0-9 -`, spaces to `-`, collapse `--`. Script arguments go as repeated `arguments=<value>` params (not JSON). A wrong slug logs `Command not found: <slug> in <extension>`. The old `raycast://script-commands/<file-slug>` form is not what Raycast generates. Quicklinks: still use Copy Deeplink. [APP]
 - AI Projects also expose Copy Deeplink; old "folder" deeplinks still resolve after v2 rename to Projects. [MAN]
 
 ## Aliases
 - Allowed chars: a-z, 0-9, space only; auto-lowercased; multi-word OK (space shown as a visible-space glyph). No special chars. [MAN]
 - Strict PREFIX matching (not fuzzy): exact alias = top result; prefix = boosted. Take effect immediately. [MAN]
 - Set: select command -> cmd-, (or cmd-K -> Configure Command) -> Set Alias; or Settings -> Shortcuts. [MAN]
-- [MAN] Alias + space on a command with arguments focuses its first argument field (so typing an alias, a space, then a value fills the argument). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
+- [MAN 09-30-26] Alias + space on a command with arguments focuses its first argument field (how `t 5` works). Configure Command from root search is ⇧⌘, ; it also has Delete Alias / Delete Hotkey. Aliases show as a badge beside the command in root search.
 
 ## Hotkeys
 - Global; work with Raycast closed. Set via Configure Command -> Set/Record Hotkey or Settings -> Shortcuts. Recorder auto-saves after ~1.5s (Return saves now, Backspace clears). [MAN]
@@ -77,7 +77,8 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Keys record as PHYSICAL position by default; click a key in the recorder to toggle key-equivalent (blue dot). Built-in Raycast shortcuts always use key equivalents. [MAN]
 - Conflicts: the launcher hotkey can't be overwritten; another command's hotkey can (it loses it). Incompatible pairs flagged with red dot (single opt tap vs opt-opt double tap). [MAN]
 - Settings -> Shortcuts has filters "Hotkey Set" / "Alias Set" to audit everything. [MAN]
-- [MAN] A lone-modifier hotkey records the side pressed (small L / R); click the key in the recorder to cycle left → right → any side. Regular keys include F1-F24. A hotkey that stops firing: check Settings → Shortcuts (system updates can clear hotkeys) and that Raycast still has Accessibility.
+- [MAN 09-30-26] A lone-modifier hotkey records the side pressed (small L / R); click the key in the recorder to cycle left → right → any side. Regular keys include F1-F24. A hotkey that stops firing: check Settings → Shortcuts (system updates can clear hotkeys) and that Raycast still has Accessibility.
+- [MAN 10-19-26] Double tap (`⌘ ⌘`) and both-sides (`L⌘ R⌘`) are separate gestures that don't trigger each other; to open Raycast with both, set one as the launcher shortcut and bind the other to a Quicklink pointing at `raycast://`.
 
 ## Hyper Key
 - Settings -> Keyboard -> Hyper Key: Caps Lock, any L/R modifier, or F1-F12. Mac emits ctrl-opt-cmd (+shift if "Include Shift"). Shown as a star glyph in UI. [MAN]
@@ -113,6 +114,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Import is selective (checklist) and additive: duplicate quicklinks (same link) and snippets skipped; nothing overwritten. [MAN]
 - Script Directories / local dev extensions are NOT listed among exported categories; keep scripts in git. [MAN, inferred]
 - Snippets/Quicklinks export separately as plain JSON (no passphrase). Scheduled exports (Pro): Settings -> Advanced -> Export. [MAN]
+- [MAN 10-19-26] If a paid plan lapses, scheduled exports pause while preserving frequency and only reset to None if an account check >14 days later still sees no paid plan.
 
 ## Extensions (dev-relevant)
 - `npm run dev` opens the extension in Raycast v2 if running, else v1; update with `npm install @raycast/api@latest` for current dev behavior. [MAN]
@@ -123,6 +125,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Prompt field: `@` inserts an AI Extension, `{` inserts a Dynamic Placeholder. Output Behavior: Open in Raycast | Replace Selection. Per-command model (no "use default" option). [MAN]
 - Import from JSON ("Import AI Commands"); built-ins editable/duplicable (cmd-D) but not deletable. [MAN]
 - AI Commands do NOT load Skills. [MAN]
+- [MAN 10-19-26] Quick Fix (Settings -> AI -> Quick Fix, default double-press Right Shift) always runs on Raycast AI and spends AI credits even when AI Commands use a custom/local model.
 
 ## AI Extensions (tools)
 - Invoke with `@name` in AI Chat, Quick AI, or Root Search; chain several. Built-ins incl. `@terminal`, `@finder`, `@clipboard`, `@file-search`, `@selected-text`, `@screen-awareness`, `@manual`. [MAN]
@@ -134,10 +137,10 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Install MCP Server command: transport stdio (Command, Arguments as space string OR JSON array, Environment kv) or HTTP (URL, headers, OAuth Dynamic w/ PKCE or Static client id/secret). [MAN]
 - Stdio servers inherit Raycast's env; after changing PATH/env vars you must RESTART Raycast. [MAN]
 - Manage MCP Servers: Running/Stopped/Error status, details pane shows server stderr/output; Start/Stop/Restart/Logout/Uninstall. Each server gets `@name` and a root-search "Ask <Server>" command. Exported in `.rayconfig`. [MAN]
-- [MAN] A Store extension can bundle its own MCP server (manifest `ai.mcp`, API 2.5.0): installing the extension installs and connects it, and it shows in Manage MCP Servers beside manual ones.
+- [MAN 10-02-26] A Store extension can bundle its own MCP server (manifest `ai.mcp`, API 2.5.0): installing the extension installs and connects it, and it shows in Manage MCP Servers beside manual ones.
 
 ## Skills (Raycast AI)
-- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So skills kept in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
+- Scans `~/.claude/skills`, `~/.config/agents/skills`, `~/.config/raycast/skills`, `~/.agents/skills` (+ custom folders), TOP LEVEL ONLY. So Claude Code skills in `~/.claude/skills` are visible to Raycast AI automatically. [MAN]
 - One subfolder per skill; folder name MUST equal frontmatter `name`; file exactly `SKILL.md`. `name` 1-64 chars `[a-z0-9-]`, no leading/trailing/double hyphen; `description` 1-1024 chars. Duplicate names: first found wins. Failures skipped silently. [MAN]
 - Model sees only name/description/path catalog; description should lead with WHEN to use. Needs a tool-capable model. Folder scan cached ~60s. [MAN]
 
@@ -149,7 +152,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Script not listed: see discovery checklist above. Script errors: run it in Terminal with `env -i` style minimal PATH to reproduce. [SC-README, inferred]
 - Quicklink placeholders not replaced: check `{argument name="..."}` braces, <=3 args, placeholder name spelling. [MAN]
 - Frozen: quit/reopen; "Copy Raycast Logs" first. Missing permission: grant to Raycast in Privacy & Security. [MAN]
-- [MAN] A local dev extension misbehaving: bring `@raycast/api` up to date in `package.json`, `npm install`, then `npm run dev` again; `npx @raycast/api@latest dev` tries the newest CLI without touching `package.json`.
+- [MAN 10-02-26] A local dev extension misbehaving: bring `@raycast/api` up to date in `package.json`, `npm install`, then `npm run dev` again; `npx @raycast/api@latest dev` tries the newest CLI without touching `package.json`.
 
 ## Extensions Guidelines (Store; worth following for personal too)
 - README must state setup: API keys, credentials, codes needed to connect. Collected data used only for the service. [MAN]
@@ -157,7 +160,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Name may not contain "Assistant". Must follow technical guidelines at developers.raycast.com/basics/prepare-an-extension-for-store. [MAN]
 - PRs: stale after 14 days, closed after 21 days of inactivity. [MAN]
 
-## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked against Raycast 2.6.2)
+## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked 10-02-26, Raycast 2.6.2)
 
 - Raycast 2 replaces v1 in place (`/Applications/Raycast.app`, bundle id still `com.raycast.macos`); needs macOS Tahoe on Apple silicon. "Keep Both" at install leaves `Raycast` (still v1) and `Raycast 2`; fix = quit, delete both, reinstall. [MAN]
 - Data paths unchanged: `~/.config/raycast/extensions/<name>/` (plus a `node_modules` symlink into the app bundle's `api/node_modules`), `~/Library/Application Support/com.raycast.macos/` (encrypted `.db` files), logs `~/Library/Logs/com.raycast.macos/raycast-x-*.log`.

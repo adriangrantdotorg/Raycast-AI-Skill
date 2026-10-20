@@ -144,7 +144,7 @@ def diff_manual(page):
 
 
 def extensions():
-    """Extension folders in the MAIN checkout of the Raycast repo (folders with a package.json naming @raycast/api)."""
+    """Extension folders in the MAIN checkout of your extensions repo (RAYCAST_REPO) (folders with a package.json naming @raycast/api)."""
     out = []
     for root, dirs, files in os.walk(RAYCAST_REPO):
         dirs[:] = [d for d in dirs if d not in ("node_modules", "dist", ".git", ".claude", "assets", "swift")]
