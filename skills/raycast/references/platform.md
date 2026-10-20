@@ -162,7 +162,7 @@
 - [Prepare] Use Navigation API (`Action.Push`/`useNavigation`), never swap view content to fake navigation.
 - [Prepare] Avoid flickering "No results": don't render empty list before data; use `isLoading` (all top-level views accept it) and `List.EmptyView`/`Grid.EmptyView` for true empty states.
 - [Prepare] Don't set `navigationTitle` on root command (auto = command name); only on pushed screens, keep short, don't update repeatedly.
-- [Prepare] Store guideline says add placeholders to text fields and the search bar (optional for personal extensions).
+- [Prepare] Store guideline says add placeholders to text fields and the search bar; required for store submissions, optional for personal extensions.
 - [Best Practices] Forms: validate in `onBlur`, clear `error` in `onChange`; `useForm` + `FormValidation.Required` from `@raycast/utils` does this. `Action.SubmitForm` `onSubmit` never fires while any field has `error`.
 - [Doppler example] `storeValue` on Form items (e.g. `Form.Dropdown`) remembers last value across launches.
 - [Best Practices] On network failure, fall back to cached data + Toast rather than error screen. Gate optional features on runtime deps (installed app/CLI) and show a helpful message when missing.
