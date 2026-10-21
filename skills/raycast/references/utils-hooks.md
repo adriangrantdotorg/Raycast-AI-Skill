@@ -1,6 +1,6 @@
 # @raycast/utils: hooks, functions, OAuth, changelog, FAQ
 
-> Distilled from developers.raycast.com Utilities pages, Changelog, Migration, FAQ (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled 09-24-26 from developers.raycast.com Utilities pages, Changelog, Migration, FAQ (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 ## Hook picker (which to use when)
 - [usePromise] no cache between runs; use for mutations-heavy or non-serializable results. Fn assumed CONSTANT: changing fn identity does NOT re-run; only `args` changes do.
