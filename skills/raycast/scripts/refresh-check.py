@@ -9,7 +9,7 @@ Compares references/FRESHNESS.json (what the skill was last checked against) wit
 
 Prints one ✅ line when nothing changed, or a 🔄 list of what to read. When an API or utils version
 jumped, it also runs `tsc --noEmit` and `ray lint` (the new version's CLI) on every extension in your
-Raycast repo (the RAYCAST_REPO folder), in throwaway copies (your checkouts and node_modules are never touched). Lint findings are
+extensions folder (RAYCAST_REPO), in throwaway copies (your checkouts and node_modules are never touched). Lint findings are
 compared with a baseline, so only NEW ones (a new store or manifest rule) are reported. Exit 0 = current or offline,
 10 = refresh needed. One network check per day per stamp; later runs that day reuse the result.
 
@@ -144,7 +144,7 @@ def diff_manual(page):
 
 
 def extensions():
-    """Extension folders in the MAIN checkout of the Raycast repo (folders with a package.json naming @raycast/api)."""
+    """Extension folders in the main checkout of the RAYCAST_REPO folder (folders with a package.json naming @raycast/api)."""
     out = []
     for root, dirs, files in os.walk(RAYCAST_REPO):
         dirs[:] = [d for d in dirs if d not in ("node_modules", "dist", ".git", ".claude", "assets", "swift")]
@@ -182,7 +182,7 @@ def prepare_copy(ext):
 
 def lint_findings(output, work):
     """`ray lint` output → normalized findings: no paths, line numbers, versions or request ids, and never the
-    "Invalid author" error (personal extensions often name an author that is not a Store account)."""
+    "Invalid author" error (personal extensions often use an author name that is not a Store account)."""
     found = set()
     for line in output.splitlines():
         line = line.replace(work + "/", "").replace(work, "")
