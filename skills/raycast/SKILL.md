@@ -356,12 +356,12 @@ When building an extension that requires an external API (like Notion or Spotify
   > 2. Create a new token.
   > 3. Open Raycast, run this new command, and paste the Token in the preferences when prompted.
 
-- **Never ask for, store or show a command's alias.** *Trigger:* you are about to add a preference like "Silent Timer Alias", or a subtitle / hint that names an alias ("Use ts for NO sound"). *Discrimination:* extensions cannot read aliases: there is no API, and Raycast keeps them only in its SQLCipher-encrypted databases (`~/Library/Application Support/com.raycast.macos/settings*.db`, `main.db`; `sqlite3` says "file is not a database"), not in the plist or the logs. A typed-in copy goes stale the moment the user swaps aliases. *Action:* name the COMMAND instead (`Start Loud Timer` with subtitle `🔊`, `Start Silent Timer` with `🔇 No sound`), put the difference in the title, and add no alias preference. Never try the keychain key to decrypt the database (a permission prompt, and fragile).
+- **Never ask for, store or show a command's alias.** *Trigger:* you are about to add a preference like "Silent Timer Alias", or a subtitle / hint that names an alias ("Use ts for NO sound"). *Discrimination:* extensions cannot read aliases: there is no API, and Raycast keeps them only in its SQLCipher-encrypted databases (`~/Library/Application Support/com.raycast.macos/settings*.db`, `main.db`; `sqlite3` says "file is not a database"), not in the plist or the logs. A typed-in copy goes stale the moment the user swaps aliases, so a hint like "Use ts" soon names the wrong command. *Action:* name the COMMAND instead (`Start Loud Timer` with subtitle `🔊`, `Start Silent Timer` with `🔇 No sound`), put the difference in the title, and add no alias preference. Never try the keychain key to decrypt the database (a permission prompt, and fragile).
 - **OAuth instead of a pasted token**: `OAuthService.github|linear|slack|asana({ scope })` work out of the box with Raycast's hosted apps; `google|jira|zoom` need your own client ID. Wrap the command with `withAccessToken(service)(Command)` and read `getAccessToken().token`. Pass `personalAccessToken: prefs.token` to let a pasted token skip OAuth. Don't save source files mid-login while `ray develop` runs — the hot reload breaks the flow.
 
 ## 13. Notion-backed extensions
 
-A common pattern is a small extension that wraps a Notion database behind a Raycast form (one isolated subfolder + `package.json` per extension). The token lives in a `notionToken` password preference; the form reads it via `getPreferenceValues` and builds `new Client({ auth })`.
+A common pattern is a set of small extensions that each wrap a Notion database behind a Raycast form (one isolated subfolder + `package.json` per extension). The token lives in a `notionToken` password preference; the form reads it via `getPreferenceValues` and builds `new Client({ auth })`.
 
 - **Per-extension config when duplicating**: update `name`, `title`, `description`, `author` (your Raycast handle), and the `commands` array. Then set the `databaseId` const in the `.tsx` — extract the 32-char hex id from the database URL (`notion.so/.../<id>?v=...`).
 - **Fetch options dynamically, in one call.** Pull every dynamic field (tags, status, …) from a single `databases.retrieve` inside one `useCachedPromise` — don't issue one retrieve per field. Find properties by `type` (and name) rather than a hardcoded key, so a renamed column still resolves; locate the title property with `Object.values(db.properties).find(p => p.type === "title")`.
@@ -417,28 +417,33 @@ Absolute paths only (`~` is not expanded). A "current Finder selection" variant 
 bar is open) or asks for a Raycast feature that may already be built in. *Discrimination:* there is no API for any of it, and
 guessing wastes a build; the facts below were read from Raycast 2.6.3's bundle and logs. *Action:* use the matching row.
 
-- **The user's data:** the databases are encrypted (section 11). Readable exports the user makes: Search Quicklinks / Search
+- **The user's data:** the databases are encrypted (section 11). Readable exports the user makes themselves: Search Quicklinks / Search
   Snippets ▸ ⌘K ▸ Export → `~/Downloads/Quicklinks <date>.json` / `Snippets <date>.json` (plain JSON: `name`, `link` or
   `text`, `keyword`). The full Settings export `.rayconfig` starts `RAYCFG3\n` + a 4-byte length + a gzip JSON header
   (`exportedAt`, `encryption: {iv, salt}`), then a password-encrypted body. Never ask for that password.
 - **Built-in action shortcuts can't be rebound.** Disable Command is `⌃⇧⌘D`, hard-coded in the app's shortcut table
-  (`disableCommand:{mac: ctrl.shift.cmd.d}`); there is no setting. A remap needs a separate keyboard-remapping tool. A command switched off by accident is re-enabled in Settings ▸ Extensions.
+  (`disableCommand:{mac: ctrl.shift.cmd.d}`); there is no setting. A remap needs an outside key-remapping or automation tool. A command switched off by accident is re-enabled in Settings ▸ Extensions.
 - **The search bar is not the active app.** Opening it leaves another app frontmost (the log says `App Active: false`), so an
-  automation trigger scoped to Raycast as the frontmost app never fires. Detect the bar instead: an ON-SCREEN window owned by `Raycast` at
-  window layer 8 (CGWindowList; main bar 900×570, compact 530×446). Raycast's AI/Notes windows are layer 0.
+  "only in Raycast" app-targeted group never fires — **and conversely, any global hotkey from an automation tool gated on the
+  underlying frontmost app (e.g. a `⌘V` paste formatter for a text editor) WILL STILL FIRE when
+  Raycast's bar is opened over that app**. Detect the bar in both cases via an ON-SCREEN window
+  owned by `Raycast` at window layer 8 (`CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID)`:
+  `w.js["kCGWindowOwnerName"] && w.js["kCGWindowOwnerName"].js === "Raycast" && w.js["kCGWindowLayer"].js === 8`; main bar
+  900×570, compact 530×446). Raycast's AI/Notes windows are layer 0.
 - **Raycast Focus is built in** (Start / Toggle / Pause / Complete Focus Session). Deeplinks:
   `raycast://focus/start?goal=<title>&categories=<a,b>&duration=<SECONDS>&mode=block|allow`, `raycast://focus/toggle`,
   `raycast://focus/complete`. Built-in category ids: `social` (x.com, twitter.com, linkedin.com…, plus the Twitter app),
   `messaging`, `gaming`, `shopping`, `streaming`, `news`, `travel`; no email category ships, so mail needs one the user creates.
   A start deeplink is ignored while a session runs.
-- **No Large Type.** Raycast has nothing that shows text huge over the screen; a small helper app is needed for that.
+- **No Large Type.** Raycast has nothing that shows text huge over the screen; that needs a small separate app.
 - **100 commands per extension** (`ray lint`: "must NOT have more than 100 items"); `ray build` still passes above it, so
   count before adding.
 - **What the user ran in Raycast (history), from the log (Raycast 2.8).** Every run logs
   `[actions] Action performed: <Extension title>: <verb>`, which names only the extension; the item comes from the lines
   right after it: `openApplication` → `\tFrontmost App: <bundle id>`; `runScript` → `Running script {` + `path: "…"`;
-  `openCommand` of a view command → `openRaycastCommand took … {` + `cmd: "<command title>"` (absent from older logs); a no-view command → `commandExited {` + `entryPoint: "[dev_/]<owner>/<name>/<command>"`. A command can launch a
-  sibling in the background that exits FIRST (e.g. a timer extension's background refresher), with no marker anywhere; within a 2 s burst the
+  `openCommand` of a view command → `openRaycastCommand took … {` + `cmd: "<command title>"` (absent from older
+  logs); a no-view command → `commandExited {` + `entryPoint: "[dev_/]<owner>/<name>/<command>"`. A command can launch a
+  sibling in the background that exits FIRST (Timer's `running-timers`), with no marker anywhere; within a 2 s burst the
   LAST exit of that extension is the one the user ran. Raycast writes `<redacted_username>` for the user name inside paths and
   bundle ids; put it back. *Not recoverable:* quicklinks, snippet pastes, File Search and no-view built-ins (System
   Actions) log no name. The hidden default `raycast_EnableRootSearchLogs` only adds search terms and timings, never the
