@@ -145,7 +145,7 @@
 
 ## AI
 - [AI] `AI.ask(prompt, { creativity?, model?, signal? }): Promise<string> & EventEmitter`; stream via `const a = AI.ask(p); a.on("data", chunk => …); await a;`.
-- [AI] `creativity`: "none"|"low"|"medium"|"high"|"maximum"|0-2 number (clamped). `model`: `AI.Model["Anthropic_Claude_Sonnet_5"]`-style keys or `{ id }` for extension-provided models; unavailable model → similar fallback. [API 2.7.0, no docs changelog entry] adds `AI.Model["OpenAI_GPT-6.1_Sol"]` and deprecates `OpenAI_GPT-5.6_Sol`; deprecated keys still compile, so read the current list from `node_modules/@raycast/api/types/index.d.ts` (`enum Model`) before naming one.
+- [AI] `creativity`: "none"|"low"|"medium"|"high"|"maximum"|0-2 number (clamped). `model`: `AI.Model["Anthropic_Claude_Sonnet_5"]`-style keys or `{ id }` for extension-provided models; unavailable model → similar fallback. [API 2.7.0, npm 10-07-26, no docs changelog entry] adds `AI.Model["OpenAI_GPT-6.1_Sol"]` and deprecates `OpenAI_GPT-5.6_Sol`; deprecated keys still compile, so read the current list from `node_modules/@raycast/api/types/index.d.ts` (`enum Model`) before naming one.
 - [AI] Rate limit **10/min, 100/hour** per extension. Non-Pro users get prompted; declining throws → catch + failure toast; pre-check `environment.canAccess(AI)`.
 - [AI] In React use `useAI` from @raycast/utils instead.
 - [AI] `AI.experimental_decide({ state, questions: { k: { type: "noul"|"choice"|"score", instructions, criteria? } } }, { signal? })` → typed probability/choice/score answers, no streaming. Experimental.
