@@ -1,6 +1,6 @@
 # Script Commands spec and Raycast app features
 
-> Distilled from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
+> Distilled 09-24-26 from github.com/raycast/script-commands docs and manual.raycast.com (API 2.5.0, @raycast/utils 2.3.0). Tags like `[Manifest]` name the source page. When a fact looks stale, re-check it live: `curl -s 'https://developers.raycast.com/readme.md?ask=<question>'`, or grep the full dump (`curl -sL https://developers.raycast.com/llms-full.txt` plus `/llms-full.txt/1`).
 
 Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentation/ARGUMENTS.md;
 [SC-OUT] documentation/OUTPUTMODES.md; [MAN] Raycast manual (manual-full.txt, v2, updated Aug-Sep 2026);
@@ -62,7 +62,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Known built-ins: `raycast://extensions/raycast/raycast/store`, `raycast://extensions/raycast/raycast/send-feedback`. [MAN]
 - Focus: `raycast://focus/start?goal=Deep%20Focus&categories=social,gaming&duration=300&mode=block`, `raycast://focus/toggle`, `raycast://focus/complete`. [MAN]
 - Window mgmt: `raycast://customWindowManagementCommand?&name=MyCommand&position=center&absoluteWidth=500.0&relativeHeight=0.5&absoluteXOffset=0.0&absoluteYOffset=0.0`. `name` matching an existing custom command ignores the other params; omit `name` for a one-off temp command; `relative*` = % of screen, ignored if the `absolute*` twin is set. Window LAYOUT deeplinks accept only `name`. [MAN]
-- Built-ins and script commands (the form Raycast 2.8 itself generates): `raycast://extensions/raycast/<slug(extension title)>/<slug(command title)>`, e.g. `raycast://extensions/raycast/snippets/search-snippets`; script commands use extension `script-commands` and the slug of `@raycast.title` (`raycast://extensions/raycast/script-commands/hourly-rate-to-annual-salary-calculator`). Slug = NFD, strip accents, lowercase, trim, drop everything but `a-z0-9 -`, spaces to `-`, collapse `--`. Script arguments go as repeated `arguments=<value>` params (not JSON). A wrong slug logs `Command not found: <slug> in <extension>`. The old `raycast://script-commands/<file-slug>` form is not what Raycast generates. Quicklinks: still use Copy Deeplink. [APP]
+- Built-ins and script commands (verified against Raycast 2.8's own builder, backend `SQi` + slug `wd` in `Raycast.app/.../backend/index.mjs`): `raycast://extensions/raycast/<slug(extension title)>/<slug(command title)>`, e.g. `raycast://extensions/raycast/snippets/search-snippets`; script commands use extension `script-commands` and the slug of `@raycast.title` (`raycast://extensions/raycast/script-commands/hourly-rate-to-annual-salary-calculator`). Slug = NFD, strip accents, lowercase, trim, drop everything but `a-z0-9 -`, spaces to `-`, collapse `--`. Script arguments go as repeated `arguments=<value>` params (not JSON). A wrong slug logs `Command not found: <slug> in <extension>`. The old `raycast://script-commands/<file-slug>` form is not what Raycast generates. Quicklinks: still use Copy Deeplink. [APP]
 - AI Projects also expose Copy Deeplink; old "folder" deeplinks still resolve after v2 rename to Projects. [MAN]
 
 ## Aliases
@@ -160,7 +160,7 @@ Sources: [SC-README] github raycast/script-commands README; [SC-ARGS] documentat
 - Name may not contain "Assistant". Must follow technical guidelines at developers.raycast.com/basics/prepare-an-extension-for-store. [MAN]
 - PRs: stale after 14 days, closed after 21 days of inactivity. [MAN]
 
-## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked against Raycast 2.6.2)
+## Raycast 2 app (manual "New in v2", "Import & Export", "Extensions", "Script Commands", "Troubleshooting"; checked 10-02-26, Raycast 2.6.2)
 
 - Raycast 2 replaces v1 in place (`/Applications/Raycast.app`, bundle id still `com.raycast.macos`); needs macOS Tahoe on Apple silicon. "Keep Both" at install leaves `Raycast` (still v1) and `Raycast 2`; fix = quit, delete both, reinstall. [MAN]
 - Data paths unchanged: `~/.config/raycast/extensions/<name>/` (plus a `node_modules` symlink into the app bundle's `api/node_modules`), `~/Library/Application Support/com.raycast.macos/` (encrypted `.db` files), logs `~/Library/Logs/com.raycast.macos/raycast-x-*.log`.
