@@ -8,8 +8,8 @@ Compares references/FRESHNESS.json (what the skill was last checked against) wit
   - manual.raycast.com/llms-full.txt: every page's text, hashed per page
 
 Prints one ✅ line when nothing changed, or a 🔄 list of what to read. When an API or utils version
-jumped, it also runs `tsc --noEmit` and `ray lint` (the new version's CLI) on every extension in your
-Raycast repo (the RAYCAST_REPO folder), in throwaway copies (your checkouts and node_modules are never touched). Lint findings are
+jumped, it also runs `tsc --noEmit` and `ray lint` (the new version's CLI) on every extension in user's
+Raycast repo, in throwaway copies (his checkouts and node_modules are never touched). Lint findings are
 compared with a baseline, so only NEW ones (a new store or manifest rule) are reported. Exit 0 = current or offline,
 10 = refresh needed. One network check per day per stamp; later runs that day reuse the result.
 
@@ -30,7 +30,7 @@ TYPECHECK_DIR = os.path.expanduser("~/Library/Caches/raycast-skill-refresh/typec
 SNAPSHOT_DIR = os.path.expanduser("~/Library/Application Support/raycast-skill-refresh/manual")
 LINT_BASELINE = os.path.expanduser("~/Library/Application Support/raycast-skill-refresh/lint-baseline.json")
 LINT_PENDING = os.path.expanduser("~/Library/Caches/raycast-skill-refresh/lint-pending.json")
-RAYCAST_REPO = os.environ.get("RAYCAST_REPO", os.path.expanduser("~/Raycast"))
+RAYCAST_REPO = os.environ.get("RAYCAST_REPO", os.path.expanduser("~/Development/Raycast"))
 REPO = "raycast/extensions"
 MANUAL = "https://manual.raycast.com/llms-full.txt"
 TODAY = datetime.date.today().isoformat()
@@ -182,7 +182,7 @@ def prepare_copy(ext):
 
 def lint_findings(output, work):
     """`ray lint` output → normalized findings: no paths, line numbers, versions or request ids, and never the
-    "Invalid author" error (a personal extension's author is often not a Store account)."""
+    "Invalid author" error (is not a Store account; these extensions are personal)."""
     found = set()
     for line in output.splitlines():
         line = line.replace(work + "/", "").replace(work, "")
