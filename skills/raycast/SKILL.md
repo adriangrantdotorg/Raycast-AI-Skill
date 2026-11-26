@@ -496,9 +496,21 @@ guessing wastes a build; the facts below were read from Raycast 2.6.3's bundle a
   2. Wait for Raycast's layer-8 window (never test "frontmost": the bar is a panel), then Return. Raycast reuses the
      export password it saved at the first manual export (backend key `ExportSettingsDataPassphrase`), so nothing types
      a password; with none saved it asks for one: stop there and let him set it by hand.
-  3. A folder dialog opens as a second Raycast layer-8 window. ⇧⌘G, type the folder, then repeat "dialog still open? →
-     Return, 1.2 s" up to 6 times. One fixed Return hung a real run with the dialog on the right folder; a Return after
-     the dialog closes would land on Raycast's own Export view and start another export.
+  3. A folder dialog opens (a sheet: one more Raycast layer-8 window), in the folder Raycast last exported to. Since
+     Raycast 2.14 (11-25-26) Return there presses NOTHING and Go to Folder (⇧⌘G) finds no typed path (empty result list,
+     Return won't close it): that hung the 11-25-26 backup. Press the dialog's own Export button through accessibility
+     from an Engine-run AppleScript: recurse `UI elements` of `sheet 1 of window "Main Window"`, skipping AXScrollArea /
+     AXOutline / AXTable (`entire contents` missed the button once the list held files, and took 30 s+), match the
+     AXButton titled `Export`, check `enabled`, `click`. The `Where:` pop-up's value names the folder. Then look for the
+     file wherever it landed (export folder, Downloads, Desktop, Documents, Spotlight) and move it. Reference: Keyboard
+     Maestro repo, Ultra Backup Nuke step "Raycast: press Export in the folder dialog", guard
+     `tools/km-guards/check-raycast-export.py`.
+     The dialog's start folder lives in `com.raycast.macos` key `NSOSPLastRootDirectory` (bookmark data; Raycast
+     reads it each time the dialog opens). To test another start folder: save it (`defaults export com.raycast.macos -`,
+     `plutil -extract NSOSPLastRootDirectory raw -`), write a bookmark of `~/Downloads`
+     (`URL.bookmarkData()` printed as hex → `defaults write … -data <hex>`), run, then write the saved bytes back and
+     `cmp` them. Tested 11-26-26: the dialog opened in Downloads, Export saved there, the file step moved it. ⌥⌘L
+     (Downloads) does NOT move this dialog. Desktop, Documents and other folders were not tested live.
   4. The dialog CLOSES the moment attention moves (a step in a separate call found it gone): run every step in one go.
   5. Wait for `Raycast-X-<date>.rayconfig` (starts `RAYCFG3`, ~395 KB). Close Raycast WITHOUT Escape (Escape may be a
      hotkey that cancels other macros): there is no hide link or command, but activating the app that was in front
