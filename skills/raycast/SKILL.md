@@ -151,9 +151,19 @@ These bite every time and aren't obvious from Raycast's documentation:
   # Optional parameters:
   # @raycast.icon ~/Library/CloudStorage/GoogleDrive-user@example.com/Other computers/My Mac mini/Synced/Personal/Productivity/Raycast/Raycast Scripts/images/Keyboard-Maestro.png
 
-  # Use osascript to tell Keyboard Maestro to run the macro ID currently in the clipboard
-  osascript -e 'tell application "Keyboard Maestro Engine" to do script "<UUID>"' &>/dev/null
+  # Start the macro and return at once (a plain `do script` waits for the whole macro)
+  osascript -e 'tell application "Keyboard Maestro Engine" to ignoring application responses' -e 'do script "<UUID>"' -e 'end ignoring' &>/dev/null
   ```
+  **Why `ignoring application responses` (11-26-26).** *Trigger:* a Script Command runs a macro that can take over
+  30 s (a backup, a build), or he reports Raycast's toast "Script execution failed" while the macro itself did its
+  job. *Discrimination:* Raycast 2.14 stops waiting for a script after 30 s (log line `Host request timed out:
+  method=scriptCommands.runScript` in `~/Library/Logs/com.raycast.macos/raycast-x-*.log`) and shows that toast;
+  osascript's own Apple-event wait ends at 120 s with exit 1. A script whose exit code or output matters (fullOutput
+  mode) must keep waiting: leave those alone. *Action:* the form above (tested: returns in 0.11 s, a 5 s macro still
+  ran to its end). His 103 older silent scripts in that folder keep the waiting form: the user chose to leave them (11-26-26) after
+  hearing the cost. The no-wait form hides a missing macro (tested with a made-up UUID: waiting form exit 1, so Raycast
+  shows a failure; no-wait form exit 0, so nothing at all). Switch one only when its macro runs over 30 s (`Ultra
+  Backup.sh` was the first); never sweep them all without asking.
   For app or custom squircle icons saved under `images/`, export `.icns` with `sips -s format png -z 512 512 "<App>.app/Contents/Resources/AppIcon.icns" --out "images/<Name>.png"` or crop a generated squircle to its outer rim (`NSBitmapImageRep`) and clip with `NSBezierPath(roundedRect:xRadius:yRadius:)` into a `512×512` transparent-corner PNG so it fills the canvas with no square backdrop. `chmod +x` the script. Raycast auto-discovers it immediately without restart.
 - **No install step: a Script Command runs its source where it lives (user, 10-27-26).** *Trigger:* a Script Command
   you are writing would run a helper script or tool, and the plan copies or installs it somewhere (`install.sh`,
